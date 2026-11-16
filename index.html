@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b12">
+<title>AkseStore — Telegram Stars</title>
+<style>
+:root{--bg:#090b12;--panel:#111522;--line:rgba(255,255,255,.09);--text:#f5f7ff;--muted:#929bb1;--blue:#6d8cff;--cyan:#64d8ff;--green:#52d6a0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% -15%,#1c2a55 0,transparent 45%),var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:1080px;margin:auto;padding:24px 18px 60px}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 0 42px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:20px}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#08101e;font-size:21px}
+.status{color:var(--green);font-size:12px;border:1px solid #52d6a044;background:#52d6a012;padding:7px 11px;border-radius:99px}
+.hero{text-align:center;max-width:700px;margin:0 auto 34px}
+.eyebrow{color:var(--cyan);font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:800}
+.hero h1{font-size:clamp(34px,7vw,62px);line-height:1.04;letter-spacing:-2.5px;margin:14px 0}
+.gradient{background:linear-gradient(90deg,#fff,#8bb4ff 55%,#68e0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p,.sub{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+.panel{background:linear-gradient(160deg,#171e30,#101522);border:1px solid var(--line);border-radius:23px;padding:24px;box-shadow:0 18px 60px #0003}
+.panel h2{font-size:19px;margin:0 0 5px}
+.sub{font-size:13px;margin:0 0 20px}
+.stockbox{display:flex;align-items:center;justify-content:space-between;padding:16px;background:#0b1020;border:1px solid var(--line);border-radius:16px;margin-bottom:20px}
+.stock-label{font-size:12px;color:var(--muted)}
+.stock-number{font-size:26px;font-weight:850}
+.stock-number small{font-size:12px;color:var(--muted)}
+.fieldlabel{display:block;font-size:12px;color:var(--muted);margin:15px 0 7px}
+.input{width:100%;padding:14px 15px;background:#0b1020;border:1px solid var(--line);border-radius:13px;color:var(--text);outline:none}
+.input:focus{border-color:#7894ff}
+.calc{display:flex;align-items:center;justify-content:space-between;margin:18px 0 15px;padding:15px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.calc span{color:var(--muted);font-size:13px}
+.calc strong{font-size:25px}
+.btn{border:0;border-radius:13px;padding:14px 18px;font-weight:800;color:#08101e;background:linear-gradient(100deg,#8da4ff,#62d9ff);width:100%}
+.btn.secondary{background:#202a42;color:var(--text);border:1px solid var(--line)}
+.note{font-size:11px;color:var(--muted);margin:12px 0 0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.feature{background:#101625;border:1px solid var(--line);border-radius:14px;padding:13px;text-align:center;font-size:12px;color:var(--muted)}
+.feature b{display:block;color:var(--text);font-size:13px}
+.review-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.review-form textarea{grid-column:1/-1;min-height:85px;resize:vertical}
+.review-form button{grid-column:1/-1}
+.review-list{display:grid;gap:10px;margin-top:16px}
+.review{padding:14px;background:#0c1220;border:1px solid var(--line);border-radius:14px}
+.review-top{display:flex;justify-content:space-between;gap:10px}
+.review-name{font-weight:750}
+.stars{color:#ffc96b;letter-spacing:2px}
+.review p{color:#c5ccdc;margin:8px 0 0;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:18px;border:1px dashed var(--line);border-radius:14px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:32px 10px 0}
+.admin{margin-top:18px;display:none}
+.admin.open{display:block}
+.adminrow{display:flex;gap:10px;align-items:end}
+.adminrow>div{flex:1}
+.smallbtn{width:auto;padding:11px 14px}
+.adminhint{font-size:11px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;background:#202a42;padding:11px 16px;border-radius:12px;transition:.25s;z-index:5;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.wrap{padding:18px 14px 40px}.panel{padding:19px}}
+@media(max-width:420px){.review-form{grid-template-columns:1fr}.review-form textarea,.review-form button{grid-column:auto}.features{gap:7px}.feature{padding:10px 6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="brand"><div class="logo">✦</div>AkseStore</div>
+<div class="status">● Онлайн-магазин</div>
+</header>
+
+<section class="hero">
+<div class="eyebrow">Telegram Stars</div>
+<h1>Звёзды для Telegram<br><span class="gradient">быстро и удобно</span></h1>
+<p>Доверие клиента — это наше всё.<br>Качество — залог успеха.</p>
+</section>
+
+<main class="grid">
+<section class="panel">
+<h2>Купить звёзды</h2>
+<p class="sub">Выберите количество и узнайте стоимость</p>
+<div class="stockbox">
+<div>
+<div class="stock-label">Доступно в наличии</div>
+<div class="stock-number" id="stock">300 <small>⭐</small></div>
+</div>
+<div class="status" id="syncState">● Синхронизация</div>
+</div>
+<label class="fieldlabel" for="amount">Количество звёзд</label>
+<input class="input" id="amount" type="number" min="1" step="1" value="50">
+<div class="calc">
+<span>К оплате · 1 ⭐ = 1,40 ₽</span>
+<strong id="total">70 ₽</strong>
+</div>
+<button class="btn" id="buyBtn">Перейти к покупке</button>
+<p class="note">Кнопка открывает Telegram для согласования заказа. Наличие и условия подтвердите перед оплатой.</p>
+<div class="features">
+<div class="feature"><b>⭐ Прозрачно</b>Понятный расчёт</div>
+<div class="feature"><b>⚡ Удобно</b>Связь в Telegram</div>
+<div class="feature"><b>🔄 Актуально</b>Общий остаток</div>
+</div>
+</section>
+
+<section class="panel">
+<h2>Отзывы покупателей</h2>
+<p class="sub">Поделитесь впечатлением о взаимодействии с магазином</p>
+<form class="review-form" id="reviewForm">
+<input class="input" id="reviewName" maxlength="32" placeholder="Ваше имя" required>
+<select class="input" id="reviewRating" aria-label="Оценка">
+<option value="5">★★★★★ — 5</option>
+<option value="4">★★★★☆ — 4</option>
+<option value="3">★★★☆☆ — 3</option>
+<option value="2">★★☆☆☆ — 2</option>
+<option value="1">★☆☆☆☆ — 1</option>
+</select>
+<textarea class="input" id="reviewText" maxlength="500" placeholder="Ваш отзыв..." required></textarea>
+<button class="btn secondary" type="submit">Оставить отзыв</button>
+</form>
+<div class="review-list" id="reviewList">
+<div class="empty">Загружаем отзывы…</div>
+</div>
+</section>
+</main>
+
+<section class="panel admin" id="adminPanel">
+<h2>Панель администратора</h2>
+<p class="sub">Изменение общего остатка звёзд</p>
+<div class="adminrow">
+<div>
+<label class="fieldlabel" for="stockEdit">Новый остаток</label>
+<input class="input" id="stockEdit" type="number" min="0" step="1">
+</div>
+<button class="btn smallbtn" id="saveStock">Сохранить</button>
+</div>
+<p class="adminhint">Изменение сохранится в Firestore и отобразится у посетителей после синхронизации.</p>
+</section>
+
+<footer><strong>AkseStore</strong> · Доверие клиента — это наше всё</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+ getFirestore, doc, collection, addDoc, onSnapshot,
+ setDoc, query, orderBy, serverTimestamp, limit
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+// Firebase-конфигурация из твоего файла Nexogram
+const firebaseConfig = {
+ apiKey: "AIzaSyC0GTMP5WvuC8dR6f4qALPE8brWWxQIn58",
+ authDomain: "nexogram-7b346.firebaseapp.com",
+ projectId: "nexogram-7b346",
+ storageBucket: "nexogram-7b346.firebasestorage.app",
+ messagingSenderId: "667524591051",
+ appId: "1:667524591051:web:af3f42d908b1b1b77fda4e"
+};
+
+const PRICE = 1.40;
+const CONTACT = "https://t.me/akselovvv";
+const ADMIN_PASSWORD = "malik2011";
+
+const stockEl = document.getElementById("stock");
+const amountEl = document.getElementById("amount");
+const totalEl = document.getElementById("total");
+const toastEl = document.getElementById("toast");
+
+let currentStock = 300;
+let db = null;
+let firebaseReady = false;
+
+function toast(message) {
+ toastEl.textContent = message;
+ toastEl.classList.add("show");
+ setTimeout(() => toastEl.classList.remove("show"), 2600);
+}
+
+function showStock(value) {
+ currentStock = Math.max(0, Number(value) || 0);
+ stockEl.innerHTML = `${currentStock.toLocaleString("ru-RU")} <small>⭐</small>`;
+ document.getElementById("stockEdit").value = currentStock;
+ updateTotal();
+}
+
+function updateTotal() {
+ const n = Math.max(0, Math.floor(Number(amountEl.value) || 0));
+ totalEl.textContent =
+  (n * PRICE).toLocaleString("ru-RU", {maximumFractionDigits:2}) + " ₽";
+}
+
+amountEl.addEventListener("input", updateTotal);
+
+document.getElementById("buyBtn").addEventListener("click", () => {
+ const n = Math.floor(Number(amountEl.value));
+
+ if (!Number.isFinite(n) || n < 1)
+  return toast("Укажите количество звёзд");
+
+ if (n > currentStock)
+  return toast("Недостаточно звёзд в наличии");
+
+ const sum = (n * PRICE).toLocaleString("ru-RU", {maximumFractionDigits:2});
+ const message = encodeURIComponent(
+  `Здравствуйте! Хочу заказать ${n} Telegram Stars. Расчёт: ${sum} ₽.`
+ );
+
+ window.open(`${CONTACT}?text=${message}`, "_blank", "noopener");
+});
+
+updateTotal();
+
+// Админ-панель по адресу сайта с #admin
+if (location.hash === "#admin") {
+ const password = prompt("Пароль администратора:");
+ if (password === ADMIN_PASSWORD) {
+  document.getElementById("adminPanel").classList.add("open");
+ } else if (password !== null) {
+  toast("Неверный пароль");
+ }
+}
+
+function renderReviews(items) {
+ const list = document.getElementById("reviewList");
+
+ if (!items.length) {
+  list.innerHTML = '<div class="empty">Пока нет отзывов. Вы можете оставить первый.</div>';
+  return;
+ }
+
+ list.replaceChildren();
+
+ for (const item of items) {
+  const card = document.createElement("article");
+  card.className = "review";
+
+  const top = document.createElement("div");
+  top.className = "review-top";
+
+  const name = document.createElement("span");
+  name.className = "review-name";
+  name.textContent = item.name || "Покупатель";
+
+  const stars = document.createElement("span");
+  stars.className = "stars";
+
+  const rating = Math.max(1, Math.min(5, Number(item.rating) || 5));
+  stars.textContent = "★".repeat(rating) + "☆".repeat(5-rating);
+
+  top.append(name, stars);
+
+  const body = document.createElement("p");
+  body.textContent = item.text || "";
+
+  card.append(top, body);
+  list.append(card);
+ }
+}
+
+// Отправка отзывов
+document.getElementById("reviewForm").addEventListener("submit", async (event) => {
+ event.preventDefault();
+
+ const name = document.getElementById("reviewName").value.trim();
+ const rating = Number(document.getElementById("reviewRating").value);
+ const text = document.getElementById("reviewText").value.trim();
+
+ if (!name || !text)
+  return toast("Заполните имя и отзыв");
+
+ if (db && firebaseReady) {
+  try {
+   await addDoc(collection(db, "akrestore_reviews"), {
+    name, rating, text, createdAt: serverTimestamp()
+   });
+
+   event.target.reset();
+   toast("Отзыв отправлен");
+  } catch (e) {
+   console.error(e);
+   toast("Не удалось отправить. Проверьте правила Firestore");
+  }
+ } else {
+  const local = JSON.parse(localStorage.getItem("akse_local_reviews") || "[]");
+  local.unshift({name, rating, text});
+  localStorage.setItem("akse_local_reviews", JSON.stringify(local.slice(0,30)));
+  renderReviews(local);
+  event.target.reset();
+  toast("Отзыв сохранён только на этом устройстве");
+ }
+});
+
+// Изменение остатка администратором
+document.getElementById("saveStock").addEventListener("click", async () => {
+ const value = Math.floor(Number(document.getElementById("stockEdit").value));
+
+ if (!Number.isFinite(value) || value < 0)
+  return toast("Введите корректный остаток");
+
+ if (!db || !firebaseReady)
+  return toast("Firebase недоступен — остаток не сохранён");
+
+ try {
+  await setDoc(doc(db, "akrestore", "settings"), {
+   stock: value,
+   updatedAt: serverTimestamp()
+  }, {merge:true});
+
+  toast("Остаток обновлён");
+ } catch (e) {
+  console.error(e);
+  toast("Ошибка записи. Проверьте правила Firestore");
+ }
+});
+
+// Подключение Firebase
+try {
+ const app = initializeApp(firebaseConfig);
+ db = getFirestore(app);
+
+ // Счётчик остатков в реальном времени
+ onSnapshot(doc(db, "akrestore", "settings"), async (snap) => {
+  if (snap.exists()) {
+   showStock(snap.data().stock ?? 300);
+  } else {
+   showStock(300);
+   try {
+    await setDoc(doc(db, "akrestore", "settings"), {
+     stock:300,
+     updatedAt:serverTimestamp()
+    });
+   } catch(e) {
+    console.warn(e);
+   }
+  }
+
+  document.getElementById("syncState").textContent = "● В реальном времени";
+  firebaseReady = true;
+ }, (error) => {
+  console.error(error);
+  document.getElementById("syncState").textContent = "● Нет связи";
+  toast("Нет доступа к Firestore. Проверьте правила базы");
+ });
+
+ // Отзывы из Firestore
+ const reviewsQuery = query(
+  collection(db, "akrestore_reviews"),
+  orderBy("createdAt", "desc"),
+  limit(30)
+ );
+
+ onSnapshot(reviewsQuery, snap => {
+  const items = snap.docs.map(d => d.data());
+  renderReviews(items);
+ }, error => {
+  console.error(error);
+  renderReviews(JSON.parse(localStorage.getItem("akse_local_reviews") || "[]"));
+ });
+
+} catch (error) {
+ console.error(error);
+ document.getElementById("syncState").textContent = "● Локальный режим";
+ renderReviews(JSON.parse(localStorage.getItem("akse_local_reviews") || "[]"));
+}
+</script>
+</body>
+</html>
